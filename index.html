@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Play Music</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon">
+          <span class="logo-note">♪</span>
+          <div class="logo-waves">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+        <div class="logo-text">
+          <span class="logo-white">Listen</span>
+          <span class="logo-purple">Music</span>
+        </div>
+        <div class="logo-tagline">LISTEN • FEEL • INSPIRE</div>
+        <div class="logo-heart">♥</div>
+      </div>
+      <div class="sidebar-menu">
+        <a
+          href="#"
+          class="active"
+          onclick="
+            showPage('homePage');
+            setActive(this);
+          "
+        >
+          🏠 Khám Phá
+        </a>
+        <a
+          href="#"
+          onclick="
+            showPage('libraryPage');
+            setActive(this);
+          "
+        >
+          ⭐ Thư Viện
+        </a>
+        <a
+          href="#"
+          onclick="
+            showPage('top100Page');
+            setActive(this);
+          "
+        >
+          🏆 Top 100
+        </a>
+        <a
+          href="#"
+          onclick="
+            showPage('artistPage');
+            setActive(this);
+          "
+        >
+          🎸 Nghệ Sĩ
+        </a>
+      </div>
+
+      <div class="sidebar-divider"></div>
+      <a href="#" class="sidebar-playlist">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-music-note-beamed" viewBox="0 0 16 16">
+          <path d="M6 13c0 1.105-1.12 2-2.5 2S1 14.105 1 13s1.12-2 2.5-2 2.5.896 2.5 2m9-2c0 1.105-1.12 2-2.5 2s-2.5-.895-2.5-2 1.12-2 2.5-2 2.5.895 2.5 2" />
+          <path fill-rule="evenodd" d="M14 11V2h1v9zM6 3v10H5V3z" />
+          <path d="M5 2.905a1 1 0 0 1 .9-.995l8-.8a1 1 0 0 1 1.1.995V3L5 4z" />
+        </svg>
+        BXH Music
+      </a>
+      <a href="#" class="sidebar-playlist">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-graph-up-arrow" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M0 0h1v15h15v1H0zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5" />
+        </svg>
+        Top 100
+      </a>
+    </div>
+    <div class="top-header">
+      <div class="header-nav">
+        <button class="nav-btn">←</button>
+        <button class="nav-btn">→</button>
+      </div>
+      <div class="header-search" id="searchWrapper">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="search-icon" viewBox="0 0 16 16">
+          <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+        </svg>
+        <input type="text" id="searchInput" placeholder="Tìm kiếm bài hát, nghệ sĩ..." autocomplete="off" />
+        <span class="search-clear" id="searchClear" onclick="clearSearch()">✕</span>
+        <div class="search-dropdown" id="searchDropdown">
+          <div class="search-section" id="searchHistory">
+            <div class="search-section-title">🕐 Tìm kiếm gần đây</div>
+            <div id="historyList"></div>
+          </div>
+          <div class="search-section" id="searchResults" style="display: none">
+            <div class="search-section-title">🎵 Kết quả</div>
+            <div id="resultList"></div>
+          </div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="settings-wrapper" id="settingsWrapper">
+          <button class="header-btn" onclick="toggleSettings()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+              <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
+              <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z" />
+            </svg>
+          </button>
+          <div class="settings-dropdown" id="settingsDropdown">
+            <a href="#" class="settings-item" onclick="closeSettings()">
+              <span class="settings-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="m10.995 0 .573.001q.241 0 .483.007c.35.01.705.03 1.051.093.352.063.68.166.999.329a3.36 3.36 0 0 1 1.47 1.468c.162.32.265.648.328 1 .063.347.084.7.093 1.051q.007.241.007.483l.001.573v5.99l-.001.573q0 .241-.008.483c-.01.35-.03.704-.092 1.05a3.5 3.5 0 0 1-.33 1 3.36 3.36 0 0 1-1.468 1.468 3.5 3.5 0 0 1-1 .33 7 7 0 0 1-1.05.092q-.241.007-.483.008l-.573.001h-5.99l-.573-.001q-.241 0-.483-.008a7 7 0 0 1-1.052-.092 3.6 3.6 0 0 1-.998-.33 3.36 3.36 0 0 1-1.47-1.468 3.6 3.6 0 0 1-.328-1 7 7 0 0 1-.093-1.05Q.002 11.81 0 11.568V5.005l.001-.573q0-.241.007-.483c.01-.35.03-.704.093-1.05a3.6 3.6 0 0 1 .329-1A3.36 3.36 0 0 1 1.9.431 3.5 3.5 0 0 1 2.896.1 7 7 0 0 1 3.95.008Q4.19.002 4.432 0h.573zm-.107 2.518-4.756.959H6.13a.66.66 0 0 0-.296.133.5.5 0 0 0-.16.31c-.004.027-.01.08-.01.16v5.952c0 .14-.012.275-.106.39-.095.115-.21.15-.347.177l-.31.063c-.393.08-.65.133-.881.223a1.4 1.4 0 0 0-.519.333 1.25 1.25 0 0 0-.332.995c.031.297.166.582.395.792.156.142.35.25.578.296.236.047.49.031.858-.043.196-.04.38-.102.555-.205a1.4 1.4 0 0 0 .438-.405 1.5 1.5 0 0 0 .233-.55c.042-.202.052-.386.052-.588V6.347c0-.276.08-.35.302-.404.024-.005 3.954-.797 4.138-.833.257-.049.378.025.378.294v3.524c0 .14-.001.28-.096.396-.094.115-.211.15-.348.178l-.31.062c-.393.08-.649.133-.88.223a1.4 1.4 0 0 0-.52.334 1.26 1.26 0 0 0-.34.994c.03.297.174.582.404.792a1.2 1.2 0 0 0 .577.294c.237.048.49.03.858-.044.197-.04.381-.098.556-.202a1.4 1.4 0 0 0 .438-.405q.173-.252.233-.549a2.7 2.7 0 0 0 .044-.589V2.865c0-.273-.143-.443-.4-.42-.04.003-.383.064-.424.073" />
+                </svg>
+              </span>
+              <span class="settings-label">Trình phát nhạc</span>
+              <span class="settings-arrow">›</span>
+            </a>
+            <a href="#" class="settings-item" onclick="closeSettings()">
+              <span class="settings-icon">🎨</span>
+              <span class="settings-label">Giao diện</span>
+              <span class="settings-arrow">›</span>
+            </a>
+            <div class="settings-divider"></div>
+            <a href="#" class="settings-item" onclick="closeSettings()">
+              <span class="settings-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2" />
+                </svg>
+              </span>
+              <span class="settings-label">Giới thiệu</span>
+            </a>
+            <a href="#" class="settings-item" onclick="closeSettings()">
+              <span class="settings-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M7.5 5.5a.5.5 0 0 0-1 0v.634l-.549-.317a.5.5 0 1 0-.5.866L6 7l-.549.317a.5.5 0 1 0 .5.866l.549-.317V8.5a.5.5 0 1 0 1 0v-.634l.549.317a.5.5 0 1 0 .5-.866L8 7l.549-.317a.5.5 0 1 0-.5-.866l-.549.317zm-2 4.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z" />
+                  <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
+                </svg>
+              </span>
+              <span class="settings-label">Thỏa thuận sử dụng dịch vụ</span>
+              <span class="settings-arrow" style="font-size: 10px"></span>
+            </a>
+            <a href="#" class="settings-item" onclick="closeSettings()">
+              <span class="settings-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.8 11.8 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24a7 7 0 0 0 1.048-.625 11.8 11.8 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.54 1.54 0 0 0-1.044-1.263 63 63 0 0 0-2.887-.87C9.843.266 8.69 0 8 0m0 5a1.5 1.5 0 0 1 .5 2.915l.385 1.99a.5.5 0 0 1-.491.595h-.788a.5.5 0 0 1-.49-.595l.384-1.99A1.5 1.5 0 0 1 8 5" />
+                </svg>
+              </span>
+              <span class="settings-label">Chính sách bảo mật</span>
+              <span class="settings-arrow" style="font-size: 10px"></span>
+            </a>
+            <a href="#" class="settings-item" onclick="closeSettings()">
+              <span class="settings-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M8.146 4.992c-1.212 0-1.927.92-1.927 2.502v1.06c0 1.571.703 2.462 1.927 2.462.979 0 1.641-.586 1.729-1.418h1.295v.093c-.1 1.448-1.354 2.467-3.03 2.467-2.091 0-3.269-1.336-3.269-3.603V7.482c0-2.261 1.201-3.638 3.27-3.638 1.681 0 2.935 1.054 3.029 2.572v.088H9.875c-.088-.879-.768-1.512-1.729-1.512" />
+                  <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
+                </svg>
+              </span>
+              <span class="settings-label">Báo cáo vi phạm bản quyền</span>
+              <span class="settings-arrow" style="font-size: 10px"></span>
+            </a>
+            <a href="#" class="settings-item" onclick="closeSettings()">
+              <span class="settings-icon">📢</span>
+              <span class="settings-label">Quảng cáo</span>
+              <span class="settings-arrow" style="font-size: 10px"></span>
+            </a>
+            <a href="#" class="settings-item" onclick="closeSettings()">
+              <span class="settings-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M15.854.146a.5.5 0 0 1 0 .708L11.707 5H14.5a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 1 0v2.793L15.146.146a.5.5 0 0 1 .708 0m-12.2 1.182a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.6 17.6 0 0 0 4.168 6.608 17.6 17.6 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.68.68 0 0 0-.58-.122l-2.19.547a1.75 1.75 0 0 1-1.657-.459L5.482 8.062a1.75 1.75 0 0 1-.46-1.657l.548-2.19a.68.68 0 0 0-.122-.58zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z" />
+                </svg>
+              </span>
+              <span class="settings-label">Liên hệ</span>
+              <span class="settings-arrow" style="font-size: 10px"></span>
+            </a>
+          </div>
+        </div>
+        <button class="header-btn vip-btn">👑 VIP Center</button>
+        <button class="header-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <!-- Trang chủ -->
+      <div id="homePage">
+        <!-- Topics -->
+        <div class="section-header">
+          <h2>Topics</h2>
+          <span>More</span>
+        </div>
+        <div class="topics-grid">
+          <div class="topic-card" style="background: linear-gradient(135deg, #3b4fa8, #6b21a8)" onclick="openTopic('Bolero', 'bolero nhạc vàng việt nam')">
+            <span>Bolero</span>
+          </div>
+          <div class="topic-card" style="background: linear-gradient(135deg, #7c3aed, #4f46e5)" onclick="openTopic('Remix', 'nhạc remix việt nam hay nhất')">
+            <span>Remix</span>
+          </div>
+          <div class="topic-card" style="background: linear-gradient(135deg, #1d4ed8, #4338ca)" onclick="openTopic('V-Rap', 'v-rap việt nam')">
+            <span>V-Rap</span>
+          </div>
+          <div class="topic-card" style="background: linear-gradient(135deg, #b45309, #d97706)" onclick="openTopic('Pop Ballad', 'pop ballad việt nam')">
+            <span>Pop Ballad</span>
+          </div>
+          <div class="topic-card" style="background: linear-gradient(135deg, #be185d, #9d174d)" onclick="openTopic('Pop', 'nhạc pop việt nam')">
+            <span>Pop</span>
+          </div>
+          <div class="topic-card" style="background: linear-gradient(135deg, #111, #222)" onclick="openTopic('TikTok', 'nhạc tiktok việt nam trending')">
+            <span>TikTok</span>
+          </div>
+          <div class="topic-card" style="background: linear-gradient(135deg, #78350f, #92400e)" onclick="openTopic('Sad', 'nhạc buồn tâm trạng việt nam')">
+            <span>Sad</span>
+          </div>
+          <div class="topic-card" style="background: linear-gradient(135deg, #1e3a5f, #1e40af)" onclick="openTopic('K-Pop', 'kpop hot')">
+            <span>K-Pop</span>
+          </div>
+          <div class="topic-card" style="background: linear-gradient(135deg, #831843, #9d174d)" onclick="openTopic('Chill', 'nhạc chill việt nam')">
+            <span>Chill</span>
+          </div>
+          <div class="topic-card" style="background: linear-gradient(135deg, #0e7490, #0891b2)" onclick="openTopic('Summer', 'nhạc mùa hè việt nam')">
+            <span>Summer</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Thư viện -->
+      <div id="libraryPage" style="display: none">
+        <div class="library-grid">
+          <!-- Yêu Thích -->
+          <div class="library-card" onclick="showPage('favoritePage')">
+            <div class="library-card-icon">❤️</div>
+            <div class="library-card-name">Yêu Thích</div>
+            <div class="library-card-desc">Các bài hát yêu thích</div>
+          </div>
+
+          <!-- Đã Tải -->
+          <div class="library-card" onclick="showPage('downloadPage')">
+            <div class="library-card-icon">⬇️</div>
+            <div class="library-card-name">Đã Tải</div>
+            <div class="library-card-desc">Bài hát đã tải về</div>
+          </div>
+
+          <!-- Upload -->
+          <div class="library-card" onclick="showPage('uploadPage')">
+            <div class="library-card-icon">⬆️</div>
+            <div class="library-card-name">Upload</div>
+            <div class="library-card-desc">Bài hát đã upload</div>
+          </div>
+
+          <!-- MV -->
+          <div class="library-card" onclick="showPage('mvPage')">
+            <div class="library-card-icon">🎬</div>
+            <div class="library-card-name">MV</div>
+            <div class="library-card-desc">Music Video</div>
+          </div>
+        </div>
+      </div>
+      <!-- Trang Yêu Thích -->
+      <div id="favoritePage" style="display: none">
+        <div class="song-list">
+          <div class="song-list-header">
+            <span>#</span>
+            <span>Bài hát</span>
+            <span>Ca sĩ</span>
+            <span>⏰</span>
+          </div>
+          <div id="favoriteList"></div>
+        </div>
+      </div>
+
+      <!-- Trang YouTube Topic -->
+      <div id="youtubePage" style="display: none">
+        <div class="youtube-page-header">
+          <button
+            class="yt-back-btn"
+            onclick="
+              showPage('homePage');
+              setActive(document.querySelector('.sidebar-menu a'));
+            "
+          >
+            ← Quay lại
+          </button>
+          <h2 id="youtubePageTitle" style="color: white; margin: 0; font-size: 22px"></h2>
+        </div>
+        <div id="youtubeList" class="youtube-list">
+          <div class="yt-loading">🎵 Đang tải nhạc...</div>
+        </div>
+      </div>
+
+      <!-- YouTube Player Modal -->
+      <div id="ytPlayerModal" class="yt-modal" style="display: none">
+        <div class="yt-modal-content">
+          <div class="yt-modal-header">
+            <span id="ytModalTitle" class="yt-modal-title"></span>
+            <button class="yt-modal-close" onclick="closeYTPlayer()">✕</button>
+          </div>
+          <div id="ytPlayerContainer">
+            <div id="ytPlayer"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Trang Đã Tải -->
+      <div id="downloadPage" style="display: none">
+        <h2 style="color: white; padding: 20px">⬇️ Đã Tải</h2>
+      </div>
+
+      <!-- Trang Upload -->
+      <div id="uploadPage" style="display: none">
+        <h2 style="color: white; padding: 20px">⬆️ Upload</h2>
+      </div>
+
+      <!-- Trang MV -->
+      <div id="mvPage" style="display: none">
+        <h2 style="color: white; padding: 20px">🎬 MV</h2>
+      </div>
+    </div>
+    <div class="player-bar">
+      <!-- Nút điều khiển -->
+      <div class="controls">
+        <button onclick="prevSong()" id="prevBtn" class="btn btn-outline-light border-0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-skip-backward-fill" viewBox="0 0 16 16">
+            <path d="M.5 3.5A.5.5 0 0 0 0 4v8a.5.5 0 0 0 1 0V8.753l6.267 3.636c.54.313 1.233-.066 1.233-.697v-2.94l6.267 3.636c.54.314 1.233-.065 1.233-.696V4.308c0-.63-.693-1.01-1.233-.696L8.5 7.248v-2.94c0-.63-.692-1.01-1.233-.696L1 7.248V4a.5.5 0 0 0-.5-.5" />
+          </svg>
+        </button>
+        <button onclick="togglePlay()" id="playPauseBtn" class="btn btn-light rounded-circle">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-pause-fill" viewBox="0 0 16 16">
+            <path d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5m5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5" />
+          </svg>
+        </button>
+        <button onclick="nextSong()" id="nextBtn" class="btn btn-outline-light border-0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-skip-forward-fill" viewBox="0 0 16 16">
+            <path d="M15.5 3.5a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V8.753l-6.267 3.636c-.54.313-1.233-.066-1.233-.697v-2.94l-6.267 3.636C.693 12.703 0 12.324 0 11.693V4.308c0-.63.693-1.01 1.233-.696L7.5 7.248v-2.94c0-.63.693-1.01 1.233-.696L15 7.248V4a.5.5 0 0 1 .5-.5" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Thanh thời lượng -->
+      <div class="progress-container">
+        <span id="currentTime">0:00</span>
+        <input type="range" id="progressBar" value="0" min="0" step="0.1" />
+        <span id="duration">0:00</span>
+      </div>
+    </div>
+
+    <div class="volume-container">
+      <span id="volumeIcon" onclick="toggleMute()" style="cursor: pointer">🔊</span>
+      <div class="volume-popup" id="volumePopup">
+        <input type="range" id="volumeSlider" min="0" max="100" step="1" value="100" orient="vertical" />
+        <span id="volumeText">100</span>
+      </div>
+    </div>
+    <script src="index.js"></script>
+  </body>
+</html>
